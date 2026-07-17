@@ -2,46 +2,85 @@ const menuBtn = document.getElementById("menuBtn");
 const navLinks = document.getElementById("navLinks");
 const contactForm = document.getElementById("contactForm");
 const formStatus = document.getElementById("formStatus");
+const sendButton = document.getElementById("sendButton");
 
-menuBtn.addEventListener("click", () => {
-  navLinks.classList.toggle("open");
+if (menuBtn && navLinks) {
+  menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
 
-  if (navLinks.classList.contains("open")) {
-    menuBtn.textContent = "×";
-  } else {
-    menuBtn.textContent = "☰";
-  }
-});
-
-document.querySelectorAll(".nav-links a").forEach((link) => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("open");
-    menuBtn.textContent = "☰";
+    if (navLinks.classList.contains("open")) {
+      menuBtn.textContent = "×";
+    } else {
+      menuBtn.textContent = "☰";
+    }
   });
-});
 
-contactForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+  document.querySelectorAll(".nav-links a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuBtn.textContent = "☰";
+    });
+  });
+}
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const message = document.getElementById("message").value.trim();
+if (contactForm) {
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  if (!name || !email || !message) {
-    formStatus.textContent = "Please complete all fields before sending.";
-    formStatus.style.color = "#FFD700";
-    return;
-  }
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
 
-  const subject = encodeURIComponent("New Project Inquiry from IronCipher Website");
-  const body = encodeURIComponent(
-    `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
-  );
+    if (!name || !email || !message) {
+      formStatus.textContent =
+        "Please complete all fields before sending.";
+      formStatus.style.color = "#FFD700";
+      return;
+    }
 
-  window.location.href = `mailto:founder@ironciphertech.com?subject=${subject}&body=${body}`;
+    formStatus.textContent = "Sending your message...";
+    formStatus.style.color = "#00C2FF";
 
-  formStatus.textContent = "Opening your email app...";
-  formStatus.style.color = "#00C2FF";
+    sendButton.disabled = true;
+    sendButton.textContent = "Sending...";
 
-  contactForm.reset();
-});
+    const formData = new FormData(contactForm);
+
+    formData.append(
+      "_subject",
+      "New Project Inquiry from IronCipher Website"
+    );
+
+    try {
+      const response = await fetch(
+        "https://formspree.io/f/xgogapkb",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("The form submission failed.");
+      }
+
+      formStatus.textContent =
+        "Thank you! Your message has been sent successfully.";
+      formStatus.style.color = "#00C2FF";
+
+      contactForm.reset();
+    } catch (error) {
+      console.error("Contact form error:", error);
+
+      formStatus.textContent =
+        "Your message could not be sent. Please try again.";
+      formStatus.style.color = "#FFD700";
+    } finally {
+      sendButton.disabled = false;
+      sendButton.textContent = "Send Message";
+    }
+  });
+}
