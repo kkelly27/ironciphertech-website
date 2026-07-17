@@ -23,7 +23,7 @@ if (menuBtn && navLinks) {
   });
 }
 
-if (contactForm) {
+if (contactForm && formStatus && sendButton) {
   contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -42,26 +42,18 @@ if (contactForm) {
     formStatus.style.color = "#00C2FF";
 
     sendButton.disabled = true;
-    sendButton.textContent = "Sending...";
+    sendButton.innerHTML = "Sending...";
 
     const formData = new FormData(contactForm);
 
-    formData.append(
-      "_subject",
-      "New Project Inquiry from IronCipher Website"
-    );
-
     try {
-      const response = await fetch(
-        "https://formspree.io/f/xgogapkb",
-        {
-          method: "POST",
-          body: formData,
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error("The form submission failed.");
@@ -80,7 +72,7 @@ if (contactForm) {
       formStatus.style.color = "#FFD700";
     } finally {
       sendButton.disabled = false;
-      sendButton.textContent = "Send Message";
+      sendButton.innerHTML = "Send Message <span>→</span>";
     }
   });
 }
