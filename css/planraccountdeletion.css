@@ -1,0 +1,60 @@
+.account-deletion-page {
+  min-height: 100vh;
+  background: #121212;
+  color: #FFFFFF;
+  padding: 80px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.account-deletion-card {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #1E1E1E;
+  border-radius: 24px;
+  padding: 48px;
+  border: 1px solid rgba(217, 147, 59, 0.35);
+}
+
+.account-deletion-card h1 {
+  color: #D9933B;
+  font-size: 38px;
+  margin-bottom: 32px;
+}
+
+.account-deletion-card h2 {
+  color: #FFFFFF;
+  font-size: 24px;
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+
+.account-deletion-card p,
+.account-deletion-card li {
+  color: #EEEEEE;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.account-deletion-card ol {
+  padding-left: 24px;
+}
+
+.account-deletion-card a {
+  color: #D9933B;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.account-deletion-card a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .account-deletion-card {
+    padding: 30px 22px;
+  }
+
+  .account-deletion-card h1 {
+    font-size: 30px;
+  }
+}
